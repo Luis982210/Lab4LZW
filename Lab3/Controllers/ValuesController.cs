@@ -15,11 +15,11 @@ namespace Lab3.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class HuffmanController : ControllerBase
     {
         readonly IHistoryManager History;
         //constructer
-        public ValuesController(IHistoryManager History)
+        public HuffmanController(IHistoryManager History)
         {
             this.History = History;
         }
@@ -31,29 +31,71 @@ namespace Lab3.Controllers
         }
 
         //localhost:51626/api/Values/GetWithParam/?nombre=""
-        //[HttpGet("GetWithParam", Name = "Get")]
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
+        //[HttpGet("GetWithParam", Name = "Get")]        
+        
         // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {           
-        }        
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("Compress",Name= "PostCompressHuffman")]
+        public void Post(string RServerPath, string newname)
         {
+            //var UploadedFile = Request.Form.Files[0];
+            string WServerPath = "";
+            if (RServerPath != "")
+            {
+                HuffmanCoder hf = new HuffmanCoder();
+                string ServerDirectory = Directory.GetCurrentDirectory();
+                string path = Path.Combine(ServerDirectory, "Compress/");
+                if (!Directory.Exists(path)) 
+                    Directory.CreateDirectory(path);
+                WServerPath = path + newname + ".huff";
+                //FileStream ServerFile = new FileStream(RServerPath, FileMode.Create, FileAccess.ReadWrite);
+                //UploadedFile.CopyTo(ServerFile);
+                //ServerFile.Close();
+                hf.Compress(RServerPath, WServerPath);
+                string HistLine = hf.GetFilesMetrics(Path.GetFileName(RServerPath), RServerPath, WServerPath);
+                History.AddToHistory(HistLine);
+                this.WriteOnHistory(HistLine);
+            }
         }
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // POST api/values
+        [HttpPost("Decompress", Name = "PostDecompressHufman")]
+        public void Post(string RServerPath)
         {
+            //var UploadedFile = Request.Form.Files[0];
+            string WServerPath = "";
+            if (RServerPath != "")
+            {
+                HuffmanCoder hf = new HuffmanCoder();
+                string ServerDirectory = Directory.GetCurrentDirectory();
+                string path = Path.Combine(ServerDirectory, "Decompress/");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                
+                WServerPath = path + Path.GetFileName(RServerPath);
+                //FileStream ServerFile = new FileStream(RServerPath, FileMode.Create, FileAccess.ReadWrite);
+                //UploadedFile.CopyTo(ServerFile);
+                //ServerFile.Close();
+                string file = hf.uncompress(RServerPath);
+                using (FileStream FileToWrite = new FileStream(WServerPath, FileMode.CreateNew))
+                {
+                    FileToWrite.Write(Encoding.Default.GetBytes(file));
+                }
+                string HistLine = hf.GetFilesMetrics(Path.GetFileName(RServerPath), RServerPath, WServerPath);
+                History.AddToHistory(HistLine);
+                this.WriteOnHistory(HistLine);
+            }
+        }
+        private void WriteOnHistory(string NewLine)
+        {
+            string HistoryPath = Path.Combine(Directory.GetCurrentDirectory() + "/History.txt");
+            using (StreamReader Sr = new StreamReader(HistoryPath))
+            {
+                NewLine = (Sr.ReadToEnd() + "\r\n" + NewLine).Trim();
+            }
+
+            using (StreamWriter Sw = new StreamWriter(new FileStream(HistoryPath, FileMode.Create)))
+            {
+                Sw.Write(NewLine);
+            }
         }
     }
 }
