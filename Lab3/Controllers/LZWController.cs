@@ -54,6 +54,7 @@ namespace Lab3.Controllers
             }
         }
         [HttpPost("Decompress", Name = "PostDecompressLWZ")]
+<<<<<<< HEAD
         public void Post(string RServerPath)
         {
             string WServerPath = "";
@@ -75,6 +76,9 @@ namespace Lab3.Controllers
                 this.WriteOnHistory(HistLine);
             }
         }
+=======
+        
+>>>>>>> 79ef9c4ecf2ac676f02f6f1104c089a5bca925c7
 
         //----------------------------------------------------------Extras-------------------------------------------------
         private void WriteOnHistory(string NewLine)

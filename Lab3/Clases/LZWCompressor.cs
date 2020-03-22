@@ -43,6 +43,7 @@ namespace Lab3.Clases
 
 
 
+<<<<<<< HEAD
         public void Decompress(string rPath, string wPath)
         {
             string text = "";
@@ -110,6 +111,9 @@ namespace Lab3.Clases
             }
 
         }
+=======
+        
+>>>>>>> 79ef9c4ecf2ac676f02f6f1104c089a5bca925c7
 
         public string GetFilesMetrics
             (string Name, string Original, string Compresed)
@@ -217,6 +221,7 @@ namespace Lab3.Clases
         }
 
 
+<<<<<<< HEAD
         private static bool CheckEndDIccionary(List<byte> MotherList, ref int count)
         {
             List<byte> ChildList = Encoding.ASCII.GetBytes("EOD").ToList<byte>();
@@ -253,6 +258,9 @@ namespace Lab3.Clases
             return true;
         }
 
+=======
+       
+>>>>>>> 79ef9c4ecf2ac676f02f6f1104c089a5bca925c7
 
         private static Dictionary<int, string> CreateDictionary(List<byte> table)
         {
@@ -283,6 +291,7 @@ namespace Lab3.Clases
         }
 
 
+<<<<<<< HEAD
         private static int getNumbre(List<int> values)
         {
             byte[] numbers = new byte[values.Count];
@@ -299,6 +308,10 @@ namespace Lab3.Clases
             int num = Convert.ToInt32(strg, 2);
             return num;
         }
+=======
+        
+      
+>>>>>>> 79ef9c4ecf2ac676f02f6f1104c089a5bca925c7
 
         //
         //---------------------------------------------------------------------------------------------------------------------
